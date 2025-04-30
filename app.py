@@ -2,15 +2,26 @@ from flask import Flask, jsonify, send_from_directory
 import os
 from flask_cors import CORS
 
+# we need to load the .env rather than I think typing it in the terminal, this way both of us can use it.
+# without having to type it in the terminal just make a .env file and add your api key there.
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
+
 static_path = os.getenv('STATIC_PATH','static')
 template_path = os.getenv('TEMPLATE_PATH','templates')
 
 app = Flask(__name__, static_folder=static_path, template_folder=template_path)
 CORS(app)
 
+# This is not the best way because anyone can access my API key now.
+# I will change it so it will only be available in like development mode.
+
 @app.route('/api/key')
 def get_key():
+    if os.getenv('FLASK_ENV') == 'production':
+        return jsonify({'apiKey': 'sorry this is not available for public use'}) #added this for more security.
     return jsonify({'apiKey': os.getenv('NYT_API_KEY')})
+    
 
 @app.route('/')
 @app.route('/<path:path>')
