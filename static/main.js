@@ -14,3 +14,8 @@ function getDateAndTime() {
     dateElement.textContent = date.toLocaleDateString('en-US', time);
   }
   addEventListener('DOMContentLoaded', getDateAndTime);
+
+  fetch('api/findArticle/sacramento')
+    .then (response => response.json())
+    .then (data =>{ console.log(data);}) //needs to change later once we get it working.
+    .catch (error => console.error('Error fetching data:', error));

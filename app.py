@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, send_from_directory
 import os
+import requests
 from flask_cors import CORS
 
 # we need to load the .env rather than I think typing it in the terminal, this way both of us can use it.
@@ -21,6 +22,22 @@ def get_key():
     if os.getenv('FLASK_ENV') == 'production':
         return jsonify({'apiKey': 'sorry this is not available for public use'}) #added this for more security.
     return jsonify({'apiKey': os.getenv('NYT_API_KEY')})
+
+NYT_KEY = os.getenv("NYT_API_KEY")
+
+@app.route('/api/findArticle/<string:article>')
+def findArticle(article):
+    par = {
+        'q': article,
+        'sort': 'newest',
+        'api-key': NYT_KEY,
+    }
+    url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json'#for now this works but only gets 10 since I think it is on default. IDK yet.
+    response = requests.get(url, params=par, timeout=10)
+    if response.status_code == 200:
+        return jsonify(response.json())
+    else:
+        return jsonify({'error': 'Failed to fetch data from NYT API'}), 500
     
 
 @app.route('/')
