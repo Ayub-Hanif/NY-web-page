@@ -216,6 +216,12 @@ footer{
     grid-template-columns: auto auto auto;
     font-family: Georgia;
 }
+.news-image {
+    max-width: 600px;
+    max-height: 400px;
+    object-fit: cover;
+    overflow: hidden;
+}
 
 /* Hardest part of the whole assignment was for me to not just make it work for this assignment
  but rather to make it nice and dynamic so if we in the future add more articles it will do the
