@@ -128,3 +128,5 @@ async function lazyLoadArticles() {
     }
   }
 }
+
+module.exports = {getDateAndTime,};
