@@ -13,6 +13,9 @@ function getDateAndTime() {
     day: 'numeric',
   };
   dateElement.textContent = date.toLocaleDateString('en-US', time);
+  //It will return the date with full year, month but +1 bc it start with 0, and day with 0 infront because we need it.
+  // for the fetching request since it has to be in YYYYMMDD.
+  return date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
 }
 
 addEventListener('DOMContentLoaded', () => {
@@ -22,9 +25,9 @@ addEventListener('DOMContentLoaded', () => {
 });
 
 addEventListener('load', () => {
-  getDateAndTime();
-
-  fetch('api/findArticle/Sacramento/20240310')
+  //I made it so it will take the current time and date and load the recent articles 
+  const currentDate = getDateAndTime();
+  fetch(`api/findArticle/Sacramento/${currentDate}`)
   .then (response => responseStatusCheck(response))
   .then (data => { articleParser(data)})
   .catch (error => console.error('Error fetching data:', error));
