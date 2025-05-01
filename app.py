@@ -14,13 +14,8 @@ template_path = os.getenv('TEMPLATE_PATH','templates')
 app = Flask(__name__, static_folder=static_path, template_folder=template_path)
 CORS(app)
 
-# This is not the best way because anyone can access my API key now.
-# I will change it so it will only be available in like development mode.
-
 @app.route('/api/key')
 def get_key():
-    if os.getenv('FLASK_ENV') == 'production':
-        return jsonify({'apiKey': 'sorry this is not available for public use'}) #added this for more security.
     return jsonify({'apiKey': os.getenv('NYT_API_KEY')})
 
 NYT_KEY = os.getenv("NYT_API_KEY")
