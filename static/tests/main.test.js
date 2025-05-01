@@ -1,4 +1,4 @@
-const { getDateAndTime } = require('../main.js');
+const { getDateAndTime, responseStatusCheck } = require('../main.js');
 
 describe('getDateAndTime()', () => {
   beforeAll(() => {
@@ -31,4 +31,33 @@ describe('getDateAndTime()', () => {
     const human = document.querySelector('#date').textContent;
     expect(human).toBe('Tuesday, May 2, 2023');
   });
+});
+
+// we testing the response function if it correctly checks and responds to both success and fail cases.
+describe('responseStatusCheck()', () => {
+    //Test #3 - we made up a mock data of sucess and check if it actually returns the data. 
+    test('response status check for sucessful', async () => {
+        const mockData = { message: 'Success' };
+        const sucessfulResponse = {
+            ok: true,
+            json: jest.fn().mockResolvedValue(mockData),
+        };
+        const result = await responseStatusCheck(sucessfulResponse); 
+        expect(result).toEqual(mockData);
+    });
+    //Test #4 - we made up a mock data of fail and check if it actually returns the error. using try and catch because 
+    // other ways it will not work.
+    test('response status check for failed',async () => {
+        const failedResponse = {
+            ok: false,
+            json: jest.fn().mockResolvedValue({ message: 'Failed' }),
+        };
+        let caught;
+        try {
+          await responseStatusCheck(failedResponse);
+        } catch (err) {
+          caught = err;
+        }
+        expect(caught).toEqual(new Error('Network response was not ok'));
+    });
 });

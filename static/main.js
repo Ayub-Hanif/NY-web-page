@@ -129,4 +129,4 @@ async function lazyLoadArticles() {
   }
 }
 
-module.exports = {getDateAndTime,};
+module.exports = {getDateAndTime, responseStatusCheck};
