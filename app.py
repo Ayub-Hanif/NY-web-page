@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 import os
 import requests
 from flask_cors import CORS
@@ -22,16 +22,25 @@ NYT_KEY = os.getenv("NYT_API_KEY")
 
 @app.route('/api/findArticle/<string:location>/<string:date>')
 def findArticle(location, date):
+    pageSize = request.args.get('pageSize', default=10, type=int) #we need the pageSize and page to get page data not only the first page.
+    page = request.args.get('page', default=0, type=int) #we can increment using the page number to get more data.
     par = {
         'end_date': date,
         'fq': 'timesTag.location.contains:' + location + ' OR timesTag.location.contains:Davis',
         'sort': 'newest',
         'api-key': NYT_KEY,
+        'page': page,
     }
     url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json'
     response = requests.get(url, params=par, timeout=10)
     if response.status_code == 200:
-        return jsonify(response.json())
+        #added the lazy loading but for that to happen we need to add the pageSize and page to the api call.
+        # this way we can get more data but in small bits and more once we hit the footer.
+        new_data = response.json()
+        # we get the response and then we get the docs from raw data we got. Also check if its empty or not.
+        get_doc = new_data.get('response', {}).get('docs') or []
+        new_data['response']['docs'] = get_doc[:pageSize]
+        return jsonify(new_data)
     else:
         return jsonify({'error': 'Failed to fetch data from NYT API'}), 500
     

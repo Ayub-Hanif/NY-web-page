@@ -18,21 +18,6 @@ function getDateAndTime() {
   return date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
 }
 
-addEventListener('DOMContentLoaded', () => {
-  // This function will be called when the DOM is loaded
-  // We will call the getDateAndTime function to get the date and time
-  getDateAndTime();
-});
-
-addEventListener('load', () => {
-  //I made it so it will take the current time and date and load the recent articles 
-  const currentDate = getDateAndTime();
-  fetch(`api/findArticle/Sacramento/${currentDate}`)
-  .then (response => responseStatusCheck(response))
-  .then (data => { articleParser(data)})
-  .catch (error => console.error('Error fetching data:', error));
-});
-
 async function responseStatusCheck(response) {
   // This function will check the status of the response and return true or false
   // The response is an object, we need to check the status code and return true or false
@@ -51,8 +36,6 @@ async function articleParser(data) {
   // We will return an object with these properties
 
   articles = data.response.docs;
-  console.log(articles);
-
   for (let i = 0; i < articles.length; i++) {
     let articleTitle = articles[i].headline.main;
     let articleAuthor = articles[i].byline.original;
@@ -63,7 +46,6 @@ async function articleParser(data) {
     
     await injectArticle(articleTitle, articleAuthor, articleDate, articleAbstract, articleImage, articleImageCaption);
   }
-
   return true;
 }
 
@@ -88,4 +70,61 @@ async function injectArticle(articleTitle, articleAuthor, articleDate, articleAb
 
   // Append the article section to the article container
   articleContainer.appendChild(articleSection);
+}
+
+// Added this listener so it also loads the date and calls the lazyloadArticles function
+// I have added a footer options so if the user scrolls down and see the footer it will dynamically load more articles.
+addEventListener('DOMContentLoaded', () => {
+  date = getDateAndTime();
+  lazyLoadArticles();
+
+  //learned using youtube video to implement this. channel ("Steve Griffith").
+  let options = {
+    root: null,
+    // no space to be addded.
+    rootMargin: '0px',
+    //making it so only 1% of the footer is visible before it loads more articles
+    threshold: 0.01
+  };
+  const checker = new IntersectionObserver(lazyData, options);
+  checker.observe(document.querySelector("footer"));
+});
+
+function lazyData(entries) {
+    if (entries[0].isIntersecting) {
+      lazyLoadArticles();
+    }
+}
+
+let currPg = 0;
+const pgSize    = 9; 
+let isLoading    = false;
+
+// This will load articles with scroll down and also it gives the date, current page and page size to fetch the articles.
+// we hit the flask route on line 113 and then it does back end stuff and returns the articles.
+async function lazyLoadArticles() {
+  if (!isLoading) {
+    isLoading = true;
+    try {
+      const myUrl = `api/findArticle/Sacramento/${date}?page=${currPg}&pageSize=${pgSize}`;
+      const getString = await fetch(myUrl)
+      const data = await responseStatusCheck(getString);
+      if(data.response.docs.length) {
+        // when we get articles we will parse them and push them into the HTML page.
+        await articleParser(data);
+        //simple increment so we will get next page of articles once we scroll.
+        currPg++;
+      }
+      else{
+        // If we see no more articles to load we just stop return.
+        checker.disconnect();
+        return;
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error, 'page=', currPg, 'pageSize=', pgSize);
+    }
+    finally {
+      isLoading = false;
+    }
+  }
 }
