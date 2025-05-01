@@ -24,7 +24,7 @@ addEventListener('DOMContentLoaded', () => {
 addEventListener('load', () => {
   getDateAndTime();
 
-  fetch('api/findArticle/sacramento')
+  fetch('/api/findArticle/homelessness')
   .then (response => responseStatusCheck(response))
   .then (data => { articleParser(data)})
   .catch (error => console.error('Error fetching data:', error));

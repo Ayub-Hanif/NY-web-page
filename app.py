@@ -26,6 +26,7 @@ def findArticle(article):
         'q': article,
         'sort': 'newest',
         'api-key': NYT_KEY,
+        'fq': 'timesTag.location:"New York City"',
     }
     url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json'#for now this works but only gets 10 since I think it is on default. IDK yet.
     response = requests.get(url, params=par, timeout=10)
