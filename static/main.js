@@ -15,14 +15,19 @@ function getDateAndTime() {
   dateElement.textContent = date.toLocaleDateString('en-US', time);
 }
 
-addEventListener('DOMContentLoaded', getDateAndTime);
+addEventListener('DOMContentLoaded', () => {
+  // This function will be called when the DOM is loaded
+  // We will call the getDateAndTime function to get the date and time
+  getDateAndTime();
+});
 
 addEventListener('load', () => {
+  getDateAndTime();
+
   fetch('api/findArticle/sacramento')
   .then (response => responseStatusCheck(response))
   .then (data => { articleParser(data)})
   .catch (error => console.error('Error fetching data:', error));
-
 });
 
 async function responseStatusCheck(response) {
@@ -81,3 +86,7 @@ async function injectArticle(articleTitle, articleAuthor, articleDate, articleAb
   // Append the article section to the article container
   articleContainer.appendChild(articleSection);
 }
+
+
+// Export the functions for testing
+module.exports = { getDateAndTime, responseStatusCheck, articleParser, injectArticle };
