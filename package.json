@@ -7,6 +7,7 @@
     "testEnvironment": "jest-environment-jsdom"
   },
   "scripts": {
-    "jest": "jest"
+    "jest": "jest",
+    "test": "jest"
   }
 }
