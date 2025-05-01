@@ -24,7 +24,7 @@ addEventListener('DOMContentLoaded', () => {
 addEventListener('load', () => {
   getDateAndTime();
 
-  fetch('/api/findArticle/homelessness')
+  fetch('api/findArticle/Sacramento/20240310')
   .then (response => responseStatusCheck(response))
   .then (data => { articleParser(data)})
   .catch (error => console.error('Error fetching data:', error));
@@ -48,7 +48,7 @@ async function articleParser(data) {
   // We will return an object with these properties
 
   articles = data.response.docs;
-  console.log(articles[0]);
+  console.log(articles);
 
   for (let i = 0; i < articles.length; i++) {
     let articleTitle = articles[i].headline.main;
@@ -86,7 +86,3 @@ async function injectArticle(articleTitle, articleAuthor, articleDate, articleAb
   // Append the article section to the article container
   articleContainer.appendChild(articleSection);
 }
-
-
-// Export the functions for testing
-module.exports = { getDateAndTime, responseStatusCheck, articleParser, injectArticle };

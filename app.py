@@ -20,15 +20,15 @@ def get_key():
 
 NYT_KEY = os.getenv("NYT_API_KEY")
 
-@app.route('/api/findArticle/<string:article>')
-def findArticle(article):
+@app.route('/api/findArticle/<string:location>/<string:date>')
+def findArticle(location, date):
     par = {
-        'q': article,
+        'end_date': date,
+        'fq': 'timesTag.location.contains:' + location + ' OR timesTag.location.contains:Davis',
         'sort': 'newest',
         'api-key': NYT_KEY,
-        'fq': 'timesTag.location:"New York City"',
     }
-    url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json'#for now this works but only gets 10 since I think it is on default. IDK yet.
+    url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json'
     response = requests.get(url, params=par, timeout=10)
     if response.status_code == 200:
         return jsonify(response.json())
