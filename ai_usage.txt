@@ -1,0 +1,8 @@
+1. What AI tool did you use?
+A: Github Copilot
+
+2. How did you use it? What kind of questions did you ask?
+A: Smart Intellicense and creating mock article data
+
+3. How much did it help you? How helpful and accurate was it?
+A: It helped save a lot of time. Fairly accurate but doesn't follow programming best practices
