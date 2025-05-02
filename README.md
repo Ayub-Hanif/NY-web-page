@@ -18,5 +18,7 @@ This is HW #2 completed by Raiyan and Mohammad Ayub for ECS 162.
 
 # Backend tests and can be run by doing it in the root directory
 -located at -> tests/apptest.py
+<br> run this bellow code
+<br> 
 ```python -m unittest discover -v -s tests -p "appTest.py"```
 
