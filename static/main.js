@@ -13,9 +13,6 @@ function getDateAndTime() {
     day: 'numeric',
   };
   dateElement.textContent = date.toLocaleDateString('en-US', time);
-  //It will return the date with full year, month but +1 bc it start with 0, and day with 0 infront because we need it.
-  // for the fetching request since it has to be in YYYYMMDD.
-  return date.getFullYear() + String(date.getMonth() + 1).padStart(2, '0') + String(date.getDate()).padStart(2, '0');
 }
 
 async function responseStatusCheck(response) {
@@ -71,11 +68,11 @@ async function injectArticle(articleTitle, articleAuthor, articleDate, articleAb
   // Append the article section to the article container
   articleContainer.appendChild(articleSection);
 }
-
+//20250501
 // Added this listener so it also loads the date and calls the lazyloadArticles function
 // I have added a footer options so if the user scrolls down and see the footer it will dynamically load more articles.
 addEventListener('DOMContentLoaded', () => {
-  date = getDateAndTime();
+  getDateAndTime();
   lazyLoadArticles();
 
   //learned using youtube video to implement this. channel ("Steve Griffith").
@@ -103,6 +100,9 @@ let isLoading    = false;
 // This will load articles with scroll down and also it gives the date, current page and page size to fetch the articles.
 // we hit the flask route on line 113 and then it does back end stuff and returns the articles.
 async function lazyLoadArticles() {
+  date = new Date();
+  date = date.toISOString().split('T')[0].replace(/-/g, '');
+  
   if (!isLoading) {
     isLoading = true;
     try {
