@@ -9,8 +9,9 @@ This is HW #2 completed by Raiyan and Mohammad Ayub for ECS 162.
 # To run the application
 ```python app.py```
 
-# test cases can be run by doing
+# Test cases can be run by doing
 ```npm test```
 
-# Backend test are located at tests/apptest.py and can be run by doing in root dir
+# Backend tests and can be run by doing it in the root directory
+-located at -> tests/apptest.py
 ```python -m unittest discover -v -s tests -p "appTest.py"```
