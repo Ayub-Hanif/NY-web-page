@@ -1,4 +1,4 @@
-const { getDateAndTime, responseStatusCheck } = require('../main.js');
+const { getDateAndTime, responseStatusCheck, lazyLoadArticles, currPg, pgSize, isLoading } = require('../main.js');
 
 describe('date and time', () => {
     // once we are done I use the afterAll to restore the original timers after all tests are done.
@@ -47,4 +47,65 @@ describe('responseStatusCheck()', () => {
         }
         expect(caught).toEqual(new Error('Network response was not ok'));
     });
+});
+
+
+describe('lazyLoadArticles() this will test mock articles of 18 so it lazy loads them', () => {
+  beforeEach(() => {
+    document.body.innerHTML = `
+      <p id="date"></p>
+      <main>
+        <div class="gridContainer">
+        </div>
+      </main>
+      <footer id="load-more"></footer>
+    `;
+    global.isLoading = false;
+    global.checker = { disconnect: jest.fn() };
+    global.fetch = jest.fn();
+  });
+    //Test #5 - making sure this function creates and then push articles to the DOm with incrementing page number.
+    // We also made test for the fetch function to check if it is called with the correct page num and size.
+  test('loading page 0 and after that page 1 by pushing 9 articles at a time', async () => {
+    function createTempDocs(num) {
+      const tempDocs = [];
+      for (let i = 0; i < num; i++) {
+        tempDocs.push({
+          headline: { main: 'Article Title ' + i },
+          byline:   { original: 'by Ayub' + i },
+          pub_date: '2025-05-01',
+          multimedia: {
+            default: { url: 'https://test.com/img' + i + '.png' },
+            caption: 'boring ' + i
+          }
+        });
+      }
+      return tempDocs;
+    }
+    const firstPage = { response:{ docs: createTempDocs(9) }};
+    const secondPage = { response:{ docs: createTempDocs(9) }};
+
+    //mock that will return successful response and the data.
+    function okResponse(data) {
+      return {
+        ok: true,
+        json: () => Promise.resolve(data),
+      };
+    }
+
+    fetch
+      .mockResolvedValueOnce(okResponse(firstPage))
+      .mockResolvedValueOnce(okResponse(secondPage));
+
+    //mock lazyLoadArticles function to check if it is called with the correct page number and size.
+    await lazyLoadArticles();
+    expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/\?page=0&pageSize=9$/));
+    let articles = document.querySelectorAll('main .gridContainer .article');
+    expect(articles).toHaveLength(9);
+    
+    await lazyLoadArticles();
+    expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/\?page=1&pageSize=9$/));
+    articles = document.querySelectorAll('main .gridContainer .article');
+    expect(articles).toHaveLength(18);
+  });
 });

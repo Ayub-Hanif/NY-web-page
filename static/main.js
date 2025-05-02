@@ -130,5 +130,5 @@ async function lazyLoadArticles() {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = {getDateAndTime, responseStatusCheck};
+  module.exports = {getDateAndTime, responseStatusCheck, lazyLoadArticles, currPg, pgSize, isLoading};
 }
