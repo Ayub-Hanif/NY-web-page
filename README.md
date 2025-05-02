@@ -5,6 +5,11 @@ This is HW #2 completed by Raiyan and Mohammad Ayub for ECS 162.
 [![Team](https://img.shields.io/badge/team-Raiyan--Sazid-yellow)](https://github.com/araiyan)
 [![Team](https://img.shields.io/badge/team-Mohammad--Ayub--Hanif--Saleh-yellow)](https://github.com/Ayub-Hanif)
 
+
+
+# First install by doing
+```pip install -r requirements.txt```
+
 # To run the application
 ```python app.py```
 
@@ -14,3 +19,4 @@ This is HW #2 completed by Raiyan and Mohammad Ayub for ECS 162.
 # Backend tests and can be run by doing it in the root directory
 -located at -> tests/apptest.py
 ```python -m unittest discover -v -s tests -p "appTest.py"```
+
