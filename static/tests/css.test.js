@@ -1,3 +1,6 @@
+// Author: Mohammad Ayub Hanif Saleh
+//         Raiyan Sazid
+
 describe("Mobile view functionality", () => {
     beforeEach(() => {
         // Set up a mock DOM structure

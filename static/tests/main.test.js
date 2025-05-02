@@ -1,3 +1,6 @@
+// Author: Mohammad Ayub Hanif Saleh
+//         Raiyan Sazid
+
 const { getDateAndTime, responseStatusCheck, lazyLoadArticles, articleParser, currPg, pgSize, isLoading } = require('../main.js');
 
 describe('date and time', () => {
