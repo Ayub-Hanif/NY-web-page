@@ -1,7 +1,7 @@
 // Author: Mohammad Ayub Hanif Saleh
 //         Raiyan Sazid
 
-// This function gets the current date in a specific format, We return a string for the date
+// This function gets the current date in a specific format, and inject the date into the HTML page.
 // The time options is to get weekday name, year, month, and day in correct format so it will appear on website navbar.
 function getDateAndTime() {
   dateElement = document.querySelector('#date');
@@ -16,10 +16,7 @@ function getDateAndTime() {
 }
 
 async function responseStatusCheck(response) {
-  // This function will check the status of the response and return true or false
-  // The response is an object, we need to check the status code and return true or false
-  // The status code is in the range of 200-299, if it is in this range we will return true
-  // If it is not in this range we will return false
+  // This function returns Json object of the response if the response is ok.
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -27,10 +24,8 @@ async function responseStatusCheck(response) {
   return data;
 }
 async function articleParser(data) {
-  // This function will parse the data and return the article object
-  // The data is an array of objects, we need to get the first object and return it
-  // The object has the following properties: title, author, date, content, image
-  // We will return an object with these properties
+  // This function takes NYT API's json data and parses articles from response docs
+  // Then injects the articles into the HTML page using injectArticle function.
 
   articles = data.response.docs;
   for (let i = 0; i < articles.length; i++) {
@@ -53,10 +48,8 @@ async function articleParser(data) {
 }
 
 async function injectArticle(articleTitle, articleAuthor, articleDate, articleAbstract, articleImage, articleImageCaption) {
-  // This function will inject the article into the HTML page
-  // The article is an object with the following properties: title, author, date, content, image
-  // We will inject the article into the HTML page using innerHTML
-  // The HTML page has a div with id="article" where we will inject the article
+  // This function article title, author, date, abstract, image and image caption and injects them into the HTML page.
+  // It creates a new section for each article and appends it to a div with class name "gridContainer" inside main.
 
   const articleContainer = document.querySelector('main div.gridContainer');
 
@@ -74,7 +67,7 @@ async function injectArticle(articleTitle, articleAuthor, articleDate, articleAb
   // Append the article section to the article container
   articleContainer.appendChild(articleSection);
 }
-//20250501
+
 // Added this listener so it also loads the date and calls the lazyloadArticles function
 // I have added a footer options so if the user scrolls down and see the footer it will dynamically load more articles.
 addEventListener('DOMContentLoaded', () => {
