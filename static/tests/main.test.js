@@ -107,7 +107,7 @@ describe('lazyLoadArticles() this will test mock articles of 18 so it lazy loads
     expect(fetch).toHaveBeenCalledWith(expect.stringMatching(/\?page=1&pageSize=9$/));
     articles = document.querySelectorAll('main .gridContainer .article');
     expect(articles).toHaveLength(18);
-    
+  });  
 describe('articleParser and inject', () => {
   beforeEach(() => {
     // Set up a mock DOM structure
