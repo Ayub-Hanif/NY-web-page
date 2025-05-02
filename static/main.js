@@ -38,8 +38,14 @@ async function articleParser(data) {
     let articleAuthor = articles[i].byline.original;
     let articleDate = articles[i].pub_date;
     let articleAbstract = articles[i].abstract;
-    let articleImage = articles[i].multimedia.default.url;
-    let articleImageCaption = articles[i].multimedia.caption;
+
+    let articleImage = '';
+    let articleImageCaption = '';
+
+    if (articles[i].multimedia && articles[i].multimedia.default && articles[i].multimedia.default.url) {
+      articleImage = articles[i].multimedia.default.url;
+      articleImageCaption = articles[i].multimedia.caption;
+    }
     
     await injectArticle(articleTitle, articleAuthor, articleDate, articleAbstract, articleImage, articleImageCaption);
   }
@@ -55,7 +61,7 @@ async function injectArticle(articleTitle, articleAuthor, articleDate, articleAb
   const articleContainer = document.querySelector('main div.gridContainer');
 
   const articleHTML = `
-    <img src="${articleImage}" alt="${articleImageCaption}" class="news-image">
+    ${articleImage !== '' ? `<img src="${articleImage}" alt="${articleImageCaption}" class="news-image">` : ''}
     <h2>${articleTitle}</h2>
     <p>${articleAbstract}</p>
   `;
@@ -130,5 +136,5 @@ async function lazyLoadArticles() {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = {getDateAndTime, responseStatusCheck};
+  module.exports = {getDateAndTime, responseStatusCheck, articleParser};
 }
