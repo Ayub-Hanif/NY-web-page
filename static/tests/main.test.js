@@ -22,7 +22,7 @@ describe('date and time', () => {
 
 // we testing the response function if it correctly checks and responds to both success and fail cases.
 describe('responseStatusCheck()', () => {
-    //Test #3 - we made up a mock data of sucess and check if it actually returns the data. 
+    //Test #2 - we made up a mock data of sucess and check if it actually returns the data. 
     test('response status check for sucessful', async () => {
         const mockData = { message: 'Success' };
         const sucessfulResponse = {
@@ -32,7 +32,7 @@ describe('responseStatusCheck()', () => {
         const result = await responseStatusCheck(sucessfulResponse); 
         expect(result).toEqual(mockData);
     });
-    //Test #4 - we made up a mock data of fail and check if it actually returns the error. using try and catch because 
+    //Test #3 - we made up a mock data of fail and check if it actually returns the error. using try and catch because 
     // other ways it will not work.
     test('response status check for failed',async () => {
         const failedResponse = {
@@ -59,6 +59,7 @@ describe('articleParser and inject', () => {
     `;
   });
 
+  // Test #4 - Tries to inject two articles into the DOM and check if they are injected correctly.
   test('should inject articles into the DOM correctly', async () => {
     // Mock data
     const mockData = {
@@ -110,6 +111,7 @@ describe('articleParser and inject', () => {
     expect(secondArticle.querySelector('img').alt).toBe('Image 2 caption');
   });
 
+  // Test #5 - Inject two articles into the DOM, one with multimedia and one without, and check if they are injected correctly.
   test('should inject articles with no multimedia', async () => {
     // Mock data
     const mockData = {
