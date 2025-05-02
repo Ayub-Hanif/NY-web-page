@@ -20,13 +20,13 @@ def get_key():
 
 NYT_KEY = os.getenv("NYT_API_KEY")
 
-@app.route('/api/findArticle/<string:location>/<string:date>')
-def findArticle(location, date):
+@app.route('/api/findArticle/<string:location1>-<string:location2>/<string:date>')
+def findArticle(location1, location2, date):
     pageSize = request.args.get('pageSize', default=10, type=int) #we need the pageSize and page to get page data not only the first page.
     page = request.args.get('page', default=0, type=int) #we can increment using the page number to get more data.
     par = {
         'end_date': date,
-        'fq': 'timesTag.location.contains:' + location + ' OR timesTag.location.contains:Davis',
+        'fq': 'timesTag.location.contains:' + location1 + ' OR timesTag.location.contains:' + location2,
         'sort': 'newest',
         'api-key': NYT_KEY,
         'page': page,
