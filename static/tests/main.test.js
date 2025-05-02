@@ -127,30 +127,22 @@ describe('articleParser and inject', () => {
     // Mock data
     const mockData = {
       response: {
-        docs: [
-          {
-            headline: { main: 'Test Article 1' },
-            byline: { original: 'Author 1' },
-            pub_date: '2025-05-01',
-            abstract: 'This is a test abstract for article 1.',
-            multimedia: {
-              default: { url: 'image1.jpg' },
-              caption: 'Image 1 caption',
-            },
-          },
-          {
-            headline: { main: 'Test Article 2' },
-            byline: { original: 'Author 2' },
-            pub_date: '2025-05-02',
-            abstract: 'This is a test abstract for article 2.',
-            multimedia: {
-              default: { url: 'image2.jpg' },
-              caption: 'Image 2 caption',
-            },
-          },
-        ],
+        docs: [],
       },
     };
+
+    for (let i = 1; i < 3; i++) {
+      mockData.response.docs.push({
+        headline: { main: 'Article Title ' + i },
+        byline:   { original: 'by Raiyan' + i },
+        pub_date: '2025-05-0' + i,
+        abstract: 'This is a test abstract for article ' + i + '.',
+        multimedia: {
+          default: { url: 'https://test.com/image' + i + '.jpg' },
+          caption: 'boring ' + i
+        }
+      });
+    }
 
     // Call the function with mock data
     await articleParser(mockData);
@@ -161,43 +153,40 @@ describe('articleParser and inject', () => {
 
     // Check the content of the first article
     const firstArticle = articles[0];
-    expect(firstArticle.querySelector('h2').textContent).toBe('Test Article 1');
+    expect(firstArticle.querySelector('h2').textContent).toBe('Article Title 1');
     expect(firstArticle.querySelector('p').textContent).toBe('This is a test abstract for article 1.');
-    expect(firstArticle.querySelector('img').src).toContain('image1.jpg');
-    expect(firstArticle.querySelector('img').alt).toBe('Image 1 caption');
+    expect(firstArticle.querySelector('img').src).toContain('https://test.com/image1.jpg');
+    expect(firstArticle.querySelector('img').alt).toBe('boring 1');
 
     // Check the content of the second article
     const secondArticle = articles[1];
-    expect(secondArticle.querySelector('h2').textContent).toBe('Test Article 2');
+    expect(secondArticle.querySelector('h2').textContent).toBe('Article Title 2');
     expect(secondArticle.querySelector('p').textContent).toBe('This is a test abstract for article 2.');
-    expect(secondArticle.querySelector('img').src).toContain('image2.jpg');
-    expect(secondArticle.querySelector('img').alt).toBe('Image 2 caption');
+    expect(secondArticle.querySelector('img').src).toContain('https://test.com/image2.jpg');
+    expect(secondArticle.querySelector('img').alt).toBe('boring 2');
   });
 
   // Test #6 - Inject two articles into the DOM, one with multimedia and one without, and check if they are injected correctly.
   test('should inject articles with no multimedia', async () => {
     // Mock data
-    const mockData = {
+    let mockData = {
       response: {
-        docs: [
-          {
-            headline: { main: 'Test Article 1' },
-            byline: { original: 'Author 1' },
-            pub_date: '2025-05-01',
-            abstract: 'This is a test abstract for article 1.',
-          },
-          {
-            headline: { main: 'Test Article 2' },
-            byline: { original: 'Author 2' },
-            pub_date: '2025-05-02',
-            abstract: 'This is a test abstract for article 2.',
-            multimedia: {
-              default: { url: 'image2.jpg' },
-              caption: 'Image 2 caption',
-            },
-          },
-        ],
+        docs: [],
       },
+    };
+
+    for (let i = 1; i < 3; i++) {
+      mockData.response.docs.push({
+        headline: { main: 'Article Title ' + i },
+        byline:   { original: 'by Raiyan' + i },
+        pub_date: '2025-05-0' + i,
+        abstract: 'This is a test abstract for article ' + i + '.',
+      });
+    }
+
+    mockData.response.docs[1].multimedia = {
+      default: { url: 'mhttps://test.com/ig' + 2 + '.png' },
+      caption: 'boring ' + 2
     };
 
     // Call the function with mock data
@@ -209,15 +198,15 @@ describe('articleParser and inject', () => {
 
     // Check the content of the first article
     const firstArticle = articles[0];
-    expect(firstArticle.querySelector('h2').textContent).toBe('Test Article 1');
-    expect(firstArticle.querySelector('p').textContent).toBe('This is a test abstract for article 1.');
+    expect(firstArticle.querySelector('h2').textContent).toBe('Article Title 1');
+    expect(firstArticle.querySelector('p').textContent).toBe('This is a test abstract for article ' + 1 + '.');
     expect(firstArticle.querySelector('img')).toBeNull(); // No image should be present
 
     // Check the content of the second article
     const secondArticle = articles[1];
-    expect(secondArticle.querySelector('h2').textContent).toBe('Test Article 2');
-    expect(secondArticle.querySelector('p').textContent).toBe('This is a test abstract for article 2.');
-    expect(secondArticle.querySelector('img').src).toContain('image2.jpg');
-    expect(secondArticle.querySelector('img').alt).toBe('Image 2 caption');
+    expect(secondArticle.querySelector('h2').textContent).toBe('Article Title 2');
+    expect(secondArticle.querySelector('p').textContent).toBe('This is a test abstract for article ' + 2 + '.');
+    expect(secondArticle.querySelector('img').src).toContain('mhttps://test.com/ig2.png');
+    expect(secondArticle.querySelector('img').alt).toBe('boring 2');
   });
 });

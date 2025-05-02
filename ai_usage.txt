@@ -2,7 +2,7 @@
 A: Github Copilot
 
 2. How did you use it? What kind of questions did you ask?
-A: Smart Intellicense and creating mock article data
+A: Get ideas on how to connect backend style sheet with css tests
 
 3. How much did it help you? How helpful and accurate was it?
-A: It helped save a lot of time. Fairly accurate but doesn't follow programming best practices
+A: Did not help. Later found out that you can't really connect stylesheet with FDOM for testing dynamic stylesheets.
