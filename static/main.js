@@ -107,8 +107,8 @@ async function lazyLoadArticles() {
     isLoading = true;
     try {
       const myUrl = `api/findArticle/Sacramento/${date}?page=${currPg}&pageSize=${pgSize}`;
-      const getString = await fetch(myUrl)
-      const data = await responseStatusCheck(getString);
+      const response = await fetch(myUrl)
+      const data = await responseStatusCheck(response);
       if(data.response.docs.length) {
         // when we get articles we will parse them and push them into the HTML page.
         await articleParser(data);
