@@ -129,4 +129,6 @@ async function lazyLoadArticles() {
   }
 }
 
-module.exports = {getDateAndTime, responseStatusCheck};
+if (typeof module !== 'undefined') {
+  module.exports = {getDateAndTime, responseStatusCheck};
+}
