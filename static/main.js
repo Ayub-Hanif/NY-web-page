@@ -105,7 +105,7 @@ async function lazyLoadArticles() {
   if (!isLoading) {
     isLoading = true;
     try {
-      const myUrl = `api/findArticle/Sacramento/${date}?page=${currPg}&pageSize=${pgSize}`;
+      const myUrl = `api/findArticle/Sacramento-Davis/${date}?page=${currPg}&pageSize=${pgSize}`;
       const response = await fetch(myUrl)
       const data = await responseStatusCheck(response);
       if(data.response.docs.length) {
