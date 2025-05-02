@@ -10,3 +10,6 @@ This is HW #2 completed by Raiyan and Mohammad Ayub for ECS 162.
 
 # test cases can be run by doing
 ```npm test```
+
+# Backend test are located at tests/apptest.py and can be run by doing in root dir
+```python -m unittest discover -v -s tests -p "appTest.py"```

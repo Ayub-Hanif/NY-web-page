@@ -30,6 +30,7 @@ def findArticle(location1, location2, date):
         'sort': 'newest',
         'api-key': NYT_KEY,
         'page': page,
+        'pageSize': pageSize,
     }
     url = 'https://api.nytimes.com/svc/search/v2/articlesearch.json'
     response = requests.get(url, params=par, timeout=10)
