@@ -9,6 +9,8 @@ This is HW #2 completed by Raiyan and Mohammad Ayub for ECS 162.
 
 # First install by doing
 ```pip install -r requirements.txt```
+-and then
+```npm install```
 
 # To run the application
 ```python app.py```
